@@ -23,6 +23,7 @@ const App = () => {
       <AdminNavbar/>
       <EmployeeNavbar/>
       <Routes>
+        
         //employee routes
           <Route path='/employee/dashboard' element={<EmployeeDashboard/>}></Route>
           <Route path='/employee/leaves' element={<LeavePage/>}></Route>
@@ -33,6 +34,7 @@ const App = () => {
           <Route path='/admin/empolyees' element={<EmpolyeePageAdmin/>}></Route>
           <Route path='/admin/tasks' element={<TaskPageAdmin/>}></Route>
           <Route path='/admin/leaves' element={<LeavePageAdmin/>}></Route>
+
       </Routes>
     </div>
   )
