@@ -1,0 +1,82 @@
+.task-page {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.page-title {
+  color: #333;
+  border-left: 5px solid #FFD700;
+  padding-left: 15px;
+}
+
+/* Stat Cards with Gradients */
+.stat-card {
+  padding: 30px;
+  border-radius: 15px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.blue-gradient { background: linear-gradient(135deg, #4481eb 0%, #04befe 100%); }
+.orange-gradient { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); } /* Image shows orange/pink hue */
+.green-gradient { background: linear-gradient(135deg, #43a047 0%, #66bb6a 100%); }
+
+.icon-overlay {
+  font-size: 4rem;
+  position: absolute;
+  right: 15px;
+  bottom: -10px;
+  opacity: 0.15;
+  font-weight: bold;
+}
+
+/* Table Styling */
+.task-container {
+  border-radius: 12px;
+}
+
+.custom-task-table thead th {
+  background-color: #f0f2f5;
+  color: #555;
+  font-size: 0.9rem;
+  padding: 15px;
+  border: none;
+}
+
+.custom-task-table tbody td {
+  padding: 18px 15px;
+  border-bottom: 1px solid #eee;
+}
+
+/* Status Pills */
+.status-pill {
+  padding: 6px 15px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.status-pill.in-progress {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-pill.pending {
+  background-color: #fff3e0;
+  color: #ef6c00;
+}
+
+/* Action Button */
+.btn-yellow-action {
+  background-color: #FFD700;
+  border: none;
+  color: #000;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.btn-yellow-action:hover {
+  background-color: #e6c200;
+  transform: translateY(-2px);
+}

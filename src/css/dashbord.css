@@ -1,0 +1,33 @@
+body {
+    background-color: #f0f2f5;
+    font-family: sans-serif;
+}
+
+.dash-card {
+    border-radius: 12px;
+    min-height: 120px;
+    display: flex;
+    justify-content: center;
+}
+
+.bg-orange {
+    background-color: #ff9a44 !important;
+}
+
+/* Light badge styles for status tags */
+.bg-warning-light { background-color: #fff4e5; color: #b45d00; }
+.bg-success-light { background-color: #e6f4ea; color: #137333; }
+.bg-primary-light { background-color: #e8f0fe; color: #1967d2; }
+
+.table thead th {
+    border: none;
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.card {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+h2 { color: #333; }

@@ -1,0 +1,44 @@
+body {
+    background-color: #f8fafd;
+}
+
+.add-emp-btn {
+    background-color: #2b55cc;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.dept-tab {
+    color: #6c757d;
+    padding: 5px 10px;
+    font-weight: 500;
+}
+
+.dept-tab.active {
+    color: #2b55cc;
+    border-bottom: 3px solid #2b55cc;
+    border-radius: 0;
+}
+
+.table thead th {
+    font-size: 0.85rem;
+    text-transform: capitalize;
+    border-bottom: 2px solid #f1f1f1;
+    padding: 15px;
+}
+
+.table tbody td {
+    padding: 15px;
+    font-size: 0.9rem;
+    color: #444;
+}
+
+.pagination .page-link {
+    border: none;
+    margin: 0 3px;
+    border-radius: 4px;
+}
+
+.pagination .active .page-link {
+    background-color: #2b55cc;
+}

@@ -1,0 +1,27 @@
+.dashboard-bg {
+    background-color: #f4f7fe;
+    min-height: 100vh;
+}
+
+.stat-card {
+    border: none;
+    border-radius: 12px;
+}
+
+.pending { background: linear-gradient(45deg, #ff9a44, #fc6075); }
+.approved { background: linear-gradient(45deg, #56ab2f, #a8e063); }
+.rejected { background: linear-gradient(45deg, #ff416c, #ff4b2b); }
+
+.bg-success-light { background-color: #e8f5e9; color: #2e7d32; }
+.bg-warning-light { background-color: #fff3e0; color: #ef6c00; }
+
+.table thead th {
+    font-weight: 600;
+    color: #6c757d;
+    border-top: none;
+}
+
+.card {
+    border-radius: 15px;
+    overflow: hidden;
+}

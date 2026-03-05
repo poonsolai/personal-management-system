@@ -1,0 +1,7 @@
+/* Login.css-ல் உள்ள அதே Styles-ஐ இதிலும் பயன்படுத்தவும் */
+@import url('./login.css');
+
+.signup-card {
+  border-radius: 15px;
+  overflow: hidden;
+}

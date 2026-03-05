@@ -1,0 +1,78 @@
+/* Page Styling */
+.salary-page {
+  background-color: #fcfcfc;
+}
+
+.page-title {
+  color: #2c3e50;
+  border-left: 5px solid #FFD700; /* Yellow accent */
+  padding-left: 15px;
+}
+
+/* Annual Salary Card - Using a vivid green as per image */
+.annual-salary-card {
+  background: linear-gradient(135deg, #43a047 0%, #2e7d32 100%);
+  border-radius: 15px;
+  position: relative;
+  overflow: hidden;
+}
+
+.salary-icon-bg {
+  position: absolute;
+  right: 20px;
+  bottom: -10px;
+  font-size: 8rem;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+}
+
+/* Table Card Styling */
+.table-card {
+  border-radius: 12px;
+}
+
+.custom-salary-table thead th {
+  background-color: #f3f6f9;
+  color: #555;
+  font-weight: 600;
+  border: none;
+  font-size: 0.85rem;
+  padding: 15px;
+}
+
+.custom-salary-table tbody td {
+  padding: 15px;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+/* View Button Styling */
+.btn-view-custom {
+  background-color: #0d6efd;
+  color: #fff;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+
+.btn-view-custom:hover {
+  background-color: #0b5ed7;
+  color: #fff;
+}
+
+/* Main Action Yellow Button */
+.btn-yellow-action {
+  background-color: #FFD700;
+  border: none;
+  color: #000;
+  border-radius: 8px;
+}
+
+.btn-yellow-action:hover {
+  background-color: #e6c200;
+  transform: scale(1.02);
+}
+
+/* Responsive Table Scroll Fix */
+@media (max-width: 768px) {
+  .display-4 { font-size: 2.5rem; }
+}

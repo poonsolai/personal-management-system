@@ -1,0 +1,34 @@
+.bg-yellow {
+  background-color: #FFD700 !important;
+}
+
+.btn-yellow {
+  background-color: #FFD700;
+  border-color: #FFD700;
+  color: #000;
+}
+
+.btn-yellow:hover {
+  background-color: #e6c200;
+  border-color: #e6c200;
+}
+
+.logo-placeholder {
+  width: 35px;
+  height: 35px;
+  background-color: white;
+  border-radius: 4px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.input-group-text, .form-control {
+  padding: 0.6rem 0.75rem;
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: #FFD700;
+}

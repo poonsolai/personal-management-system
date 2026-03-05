@@ -1,0 +1,38 @@
+body {
+    background-color: #f0f3f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.add-task-btn {
+    background-color: #2b57cc;
+    border: none;
+    border-radius: 6px;
+}
+
+/* Custom Status Badges */
+.badge-custom {
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.status-pending { background-color: #fff4e5; color: #b45d00; }
+.status-progress { background-color: #e8f0fe; color: #1967d2; }
+.status-completed { background-color: #e6f4ea; color: #137333; }
+
+/* Table Styling */
+.table thead th {
+    background-color: #f8f9fa;
+    border: none;
+    padding: 15px;
+}
+
+.table tbody td {
+    padding: 15px;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.card {
+    border-radius: 12px;
+}
