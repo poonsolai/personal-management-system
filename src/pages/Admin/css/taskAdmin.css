@@ -36,3 +36,23 @@ body {
 .card {
     border-radius: 12px;
 }
+
+.form{
+    padding:30px 50px 80px 50px;
+}
+.form div{
+    margin-top: 40px;
+}
+.form input{
+    margin-top: 10px;
+}
+#show-form{
+    margin-top: 10px;
+    border-radius: 10px;
+    display: block;
+}
+
+#btn{
+    display: flex;
+    justify-content: space-between;
+}

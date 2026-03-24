@@ -1,21 +1,129 @@
+import { useState } from 'react';
 import './css/employeeAdmin.css';
+import useHideData from '../../hooks/useHideData';
+import useForm from '../../hooks/useForm';
+import { useEffect } from 'react';
+import axios from 'axios';
+
 
 const EmployeeList = () => {
-  const employees = [
-    { name: 'John Doe', email: 'john@mail.com', role: 'Developer', dept: 'Development', salary: '$60,000', date: '2022-01-15' },
-    { name: 'Emily Smith', email: 'emily@mail.com', role: 'HR Manager', dept: 'HR', salary: '$55,000', date: '2021-05-10' },
-    { name: 'Alex Johnson', email: 'alex@mail.com', role: 'Developer', dept: 'Development', salary: '$65,000', date: '2023-08-25' },
-    { name: 'Lisa Wong', email: 'lisa@mail.com', role: 'Marketing Specialist', dept: 'Marketing', salary: '$62,000', date: '2020-11-18' },
-    { name: 'Karthick Kumar', email: 'karthick@mail.com', role: 'Developer', dept: 'Development', salary: '$60,000', date: '2023-02-10' },
-  ];
+  
+  // employee data va database la irundhu edukurom
+  async function employee() {
+    const res = await axios.get("http://localhost:3000/admin/emp/users",{withCredentials:true});
+    setEmployees(res.data.users.reverse());
+  }
+  // ithu add or update pannuroma nu find panni athuku ethmari btns and form ah correct panna use pannurom
+  const [update, setUpdate] = useState(false);
 
   const departments = ['All', 'HR', 'Development', 'Marketing', 'Sales'];
+  // emp data store in state variable 
+  const [employees, setEmployees] = useState([]);
+  // custom hook for hide and show datas
+  const [num, viewAll, HideAll] = useHideData(employees);
+  //add task use pannura state variable
+  const [show, setShow] = useState(false);
+  //useing a custom hook for form
+  const {val, handleForm,ClearForm, setVal} = useForm({name:"",email:"",role:"",department:"HR",salary:"",date:""}); 
+  //empty 
+  const [empty, setEmpty] = useState('');
+  const [ety, setEty] = useState(false);
+  //
+  useEffect(()=>{
+    employee();
+  },[]);
+
+  // message
+  const [message, setMessage] = useState('');
+  //Show Add task form 
+  function ShowAddTaskForm(){
+    setShow((show)=> {return !show});
+    setUpdate(false);
+  }
+  //Cancel Task form
+  function CancelTaskForm(){
+    setShow(false);
+    setUpdate(false);
+    ClearForm();
+  } 
+  
+  //AddedTask function
+  async function addEmp(e){
+    e.preventDefault() // this is used to don't reload a page
+    if(val.name == "" || val.email == "" || val.role == "" || val.department == "" || val.salary == "" || val.date == "" ){
+      return alert("Fill The All Fields")
+    }
+
+    try{
+      let res = await axios.post("http://localhost:3000/admin/emp/user", val, {withCredentials:true});
+      setMessage(res.data.message);
+      employee()// update the edited value in show in ui
+      if(res.data.success){
+        setShow(false);
+        ClearForm()// clear the previce data
+      }else{
+        setShow(true);
+      }
+    }catch(err){
+      console.log(err);
+    }
+    
+  }
+
+  //remove employee function
+  async function removeEmp(id){
+    if(confirm("Delete employee ?")){
+      try{
+        const res = await axios.delete(`http://localhost:3000/admin/emp/user/${id}`, {withCredentials:true});
+        setMessage(res.data.message);
+        employee()// update the removed value in show in ui
+      }catch(err){
+        console.log(err)
+      }
+    }
+  }
+  //edit employee function
+  function editEmp(emp){
+    setUpdate(true);
+    setShow(true);
+    setVal(emp);
+  }
+  //update function
+  async function updateEmp(e){
+    e.preventDefault() // this is used to don't reload a page
+    try{
+      let res = await axios.put(`http://localhost:3000/admin/emp/user/${val._id}`, val, {withCredentials:true});
+      setMessage(res.data.message);
+      employee()// update the updated value in show in ui
+      ClearForm()// clear the previce data
+    }catch(err){
+      console.log(err);
+    }finally{
+      setShow(false);
+      
+    }
+  }
+
+  // search 
+  async function search(department) {
+    let res = await axios.get(`http://localhost:3000/admin/emp/user/${department}`, {withCredentials:true});
+    if(res.data.user.length == 0){
+      setEmployees(res.data.user);
+      setEmpty('No Employee is Empty');
+      setEty(true);
+      return;
+    }
+    setEmployees(res.data.user);
+    setEty(false);
+  };
+  
 
   return (
-    <div className="container py-5">
+    <div className="container-fuild py-5 px-4">
+  
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold text-dark">Employees</h2>
-        <button className="btn btn-primary px-4 add-emp-btn">Add Employee</button>
+        <h2 className="fw-bold text-dark">Employees Management</h2>
+        <button className="btn btn-primary px-4 add-emp-btn" onClick={ShowAddTaskForm}>Add Employee</button>
       </div>
 
       <div className="search-section mb-4">
@@ -27,16 +135,67 @@ const EmployeeList = () => {
         {/* Tab Filters */}
         <div className="d-flex gap-3 border-bottom pb-2">
           {departments.map((dept, index) => (
-            <button key={index} className={`btn btn-link text-decoration-none dept-tab ${index === 0 ? 'active' : ''}`}>
+            <button key={index} className={`btn btn-link text-decoration-none dept-tab `} onClick={()=>{search(dept)}}>
               {dept}
-            </button>
+            </button> 
           ))}
         </div>
       </div>
-
+      <p className='message'>{message}</p>
+      {/* view data btn */}
+      <div className="view">
+        {
+          num == 4 ? <button className='btn btn-secondary px-3' onClick={viewAll}>View all</button> : <button className='btn btn-secondary px-3' onClick={HideAll}>Hide</button>
+        }    
+      </div>
+      {/* Add employee Form */}
+      {
+        show && 
+        <div className="form container-fluid bg-black text-light mb-5" id='show-form'>
+          <form className='row' >
+            <div className='col-md-6'>
+              <label htmlFor="name"> Name </label>
+              <input type="text" className=' form-control' name='name' id='assign' value={val.name} onChange={handleForm} placeholder='employee name' disabled={update}/>
+            </div>
+            <div className='col-md-6'>
+              <label htmlFor="email"> Email </label>
+              <input type="text" className=' form-control' name='email' value={val.email} onChange={handleForm} placeholder='employee mail' readOnly={update}/>
+            </div>
+            <div className='col-md-6'>
+              <label htmlFor="role"> Role </label>
+              <input type="text" className=' form-control' name='role' value={val.role} onChange={handleForm} placeholder='role' required/>
+            </div>
+            <div className='col-md-6'>
+              <label htmlFor="opt" className='mt-1 pb-1'> Department </label>
+              <select name="department" id="opt" className='mt-1 form-control' onChange={handleForm} value={val.department}>
+                  <option value="HR">HR</option>
+                  <option value="Development">Development</option>
+                  <option value="Marketing">Marketing</option>
+                  <option value="Sales">Sales</option>
+              </select>
+            </div>
+            <div className='col-md-6'>
+              <label htmlFor="salary"> Salary </label>
+              <input type="text" className=' form-control' name='salary' value={val.salary} onChange={handleForm} placeholder='salary' required/>
+            </div>
+            <div className='col-md-6'>
+              <label htmlFor="date"> Join Date </label>
+              <input type="text" className=' form-control' name='date' onChange={handleForm} value={val.date} placeholder='year-month-date' required/>
+            </div>
+            <div className="col-md-12" id='btn'>
+              {
+                !update ? <button className='btn btn-success px-5 py-2' onClick={addEmp}>Add Employee</button> : <button className='btn btn-success px-5 py-2' onClick={updateEmp}>Update Employee</button>
+              }
+              <button className='btn btn-danger px-5 py-2 ' onClick={CancelTaskForm}>Cancel</button>
+            </div>
+          </form>
+          
+        </div>
+      }
       {/* Employee Table */}
+      
       <div className="card border-0 shadow-sm overflow-hidden">
-        <div className="table-responsive">
+        <div className="table-responsive table-bordered table-hover p-2">
           <table className="table mb-0 table-hover align-middle">
             <thead className="table-light text-muted">
               <tr>
@@ -50,36 +209,31 @@ const EmployeeList = () => {
               </tr>
             </thead>
             <tbody>
-              {employees.map((emp, i) => (
+              {employees.slice(0,num).map((emp, i) => (
                 <tr key={i}>
                   <td className="fw-semibold">{emp.name}</td>
                   <td>{emp.email}</td>
                   <td>{emp.role}</td>
-                  <td>{emp.dept}</td>
-                  <td>{emp.salary}</td>
+                  <td>{emp.department}</td>
+                  <td>{`$${emp.salary}`}</td>
                   <td>{emp.date}</td>
                   <td className="text-center">
-                    <button className="btn btn-primary btn-sm me-2 px-3">Edit</button>
-                    <button className="btn btn-danger btn-sm">🗑️</button>
+                    <button className="btn btn-primary btn-sm me-2 px-3" onClick={()=>{editEmp(emp)}}>Edit</button>
+                    <button className="btn btn-danger btn-sm" onClick={()=>{removeEmp(emp._id)}}>🗑️</button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          {
+              ety && 
+              <p className=' bg-secondary-subtle p-4 text-center text-danger mt-3'>
+                {empty}
+              </p>
+            }
         </div>
       </div>
 
-      {/* Pagination */}
-      <div className="d-flex justify-content-end mt-4">
-        <nav>
-          <ul className="pagination pagination-sm">
-            <li className="page-item"><a className="page-link text-dark" href="#">Previous</a></li>
-            <li className="page-item active"><a className="page-link" href="#">1</a></li>
-            <li className="page-item"><a className="page-link text-dark" href="#">2</a></li>
-            <li className="page-item"><a className="page-link text-dark" href="#">Next</a></li>
-          </ul>
-        </nav>
-      </div>
     </div>
   );
 };

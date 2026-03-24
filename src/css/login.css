@@ -32,3 +32,29 @@
   box-shadow: none;
   border-color: #FFD700;
 }
+
+.image{
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+}
+#head{
+  display: flex;
+  justify-content: space-between;
+}
+#head-text{
+  justify-self: center;
+  align-self: center;
+  margin-right: 70px;
+  color: white;
+  text-align: left;
+}
+
+.un{
+  text-decoration: none;
+}
+.card-a{
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+

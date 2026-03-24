@@ -1,10 +1,24 @@
-
-
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Playwrite+DE+Grund:wght@100..400&display=swap');
-
-body{
-    font-family: "Fredoka", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-style: normal;
+.message{
+  color: brown;
+  font-weight: 700;
+  font-size: 18px;
 }
+.checkemp{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  letter-spacing: 1px;
+  word-spacing: 2px;
+  background-color: rgba(234, 18, 18, 0.522);
+  padding: 10px 20px 0px 20px;
+  color:cyan;
+}
+.checkemp .cancel{
+  cursor: pointer;
+  padding: 0px;
+  color: whitesmoke;
+  font-size: 20px;
+}
+/* .status-pending { background-color: #fff4e5; color: #b45d00; }
+.status-progress { background-color: #e8f0fe; color: #1967d2; }
+.status-completed { background-color: #e6f4ea; color: #137333; } */

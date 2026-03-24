@@ -50,9 +50,22 @@
 .cursor-pointer {
   cursor: pointer;
 }
+.live{
+  background-color: rgba(184, 119, 119, 0.516);
+}
+
+.image{
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+}
+.text{
+  font-size: 30px;
+  color: white;
+}
 
 /* Responsive fixes */
-@media (max-width: 991px) {
+@media all and (max-width: 991px) {
   .navbar-nav {
     text-align: center;
     padding: 15px 0;
@@ -64,4 +77,8 @@
     justify-content: center;
     margin-top: 10px;
   }
+  .live{
+    background-color: rgba(184, 119, 119, 0.516);
+  }
 }
+

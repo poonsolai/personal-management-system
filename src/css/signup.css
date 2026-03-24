@@ -5,3 +5,15 @@
   border-radius: 15px;
   overflow: hidden;
 }
+
+.err{
+  color: red;
+  font-size: 15px;
+}
+.success{
+  color: green;
+}
+.load{
+  position: absolute;
+  /* left: 100px; */
+}

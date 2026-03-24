@@ -42,3 +42,8 @@ body {
 .pagination .active .page-link {
     background-color: #2b55cc;
 }
+
+.view{
+    text-align: end;
+    margin-bottom: 10px;
+}

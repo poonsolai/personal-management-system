@@ -31,3 +31,7 @@ body {
 }
 
 h2 { color: #333; }
+
+#status-pending { background-color: #fff4e5; color: #b45d00; }
+#status-progress { background-color: #e8f0fe; color: #1967d2; }
+#status-completed { background-color: #e6f4ea; color: #137333; }
