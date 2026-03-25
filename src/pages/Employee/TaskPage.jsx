@@ -18,7 +18,7 @@ const TaskPage = () => {
   // task get function 
   async function getTask() {
     try{
-      let res = await axios.get(`http://localhost:3000/employee/task/${user.name}`, {withCredentials:true});
+      let res = await axios.get(`https://personal-management-system-backend.onrender.com/employee/task/${user.name}`, {withCredentials:true});
       if(res.data.success){
         setEty(false);
         return setTasks(res.data.task.reverse());

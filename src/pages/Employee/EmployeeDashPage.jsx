@@ -25,7 +25,7 @@ const EmployeeDashboard = () => {
   CalLeave(leaves.length); // total leave calculate
   // check employee function
   async function checkEmployee() {
-    let res = await axios.get(`http://localhost:3000/employee/dashbord/${user.name}/${user.email}`, {withCredentials:true});
+    let res = await axios.get(`https://personal-management-system-backend.onrender.com/employee/dashbord/${user.name}/${user.email}`, {withCredentials:true});
     if(!res.data.success){
       setCheck(true);
       setCheckemp(res.data.message);
@@ -37,7 +37,7 @@ const EmployeeDashboard = () => {
 
   // get all details in this employee
   async function getAllDetails() {
-    let res = await axios.get(`http://localhost:3000/employee/dashbord/${user.name}`, {withCredentials:true});
+    let res = await axios.get(`https://personal-management-system-backend.onrender.com/employee/dashbord/${user.name}`, {withCredentials:true});
     if(res.data.tasks.length == 0){
       setEmpty(res.data.message);
       setEty(true);

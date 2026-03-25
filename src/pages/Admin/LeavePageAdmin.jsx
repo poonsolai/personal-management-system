@@ -8,7 +8,7 @@ const LeavePageAdmin = () => {
 
   //get all leaves in database
   async function loadLeaves() {
-    const res = await axios.get("http://localhost:3000/admin/leave", {withCredentials:true});
+    const res = await axios.get("https://personal-management-system-backend.onrender.com/admin/leave", {withCredentials:true});
     if(res.data.leaves.length == 0){
       setEmpty("Leave Request is Empty");
       setEty(true);
@@ -35,14 +35,14 @@ const LeavePageAdmin = () => {
   const [num, viewAll, HideAll] = HideData(leaveData);
   //approve function
   async function approvedFunc(id, action){
-    let res = await axios.patch(`http://localhost:3000/admin/leave/${id}`,{action:action}, {withCredentials:true});
+    let res = await axios.patch(`https://personal-management-system-backend.onrender.com/admin/leave/${id}`,{action:action}, {withCredentials:true});
     if(res.data.success){
       loadLeaves();
     }
   }
   // reject function
   async function rejectedFunc(id, action){
-    let res = await axios.patch(`http://localhost:3000/admin/leave/${id}`,{action:action}, {withCredentials:true});
+    let res = await axios.patch(`https://personal-management-system-backend.onrender.com/admin/leave/${id}`,{action:action}, {withCredentials:true});
     if(res.data.success){
       loadLeaves();
     }

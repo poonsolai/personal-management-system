@@ -10,7 +10,7 @@ const EmployeeList = () => {
   
   // employee data va database la irundhu edukurom
   async function employee() {
-    const res = await axios.get("http://localhost:3000/admin/emp/users",{withCredentials:true});
+    const res = await axios.get("https://personal-management-system-backend.onrender.com/admin/emp/users",{withCredentials:true});
     setEmployees(res.data.users.reverse());
   }
   // ithu add or update pannuroma nu find panni athuku ethmari btns and form ah correct panna use pannurom
@@ -55,7 +55,7 @@ const EmployeeList = () => {
     }
 
     try{
-      let res = await axios.post("http://localhost:3000/admin/emp/user", val, {withCredentials:true});
+      let res = await axios.post("https://personal-management-system-backend.onrender.com/admin/emp/user", val, {withCredentials:true});
       setMessage(res.data.message);
       employee()// update the edited value in show in ui
       if(res.data.success){
@@ -74,7 +74,7 @@ const EmployeeList = () => {
   async function removeEmp(id){
     if(confirm("Delete employee ?")){
       try{
-        const res = await axios.delete(`http://localhost:3000/admin/emp/user/${id}`, {withCredentials:true});
+        const res = await axios.delete(`https://personal-management-system-backend.onrender.com/admin/emp/user/${id}`, {withCredentials:true});
         setMessage(res.data.message);
         employee()// update the removed value in show in ui
       }catch(err){
@@ -92,7 +92,7 @@ const EmployeeList = () => {
   async function updateEmp(e){
     e.preventDefault() // this is used to don't reload a page
     try{
-      let res = await axios.put(`http://localhost:3000/admin/emp/user/${val._id}`, val, {withCredentials:true});
+      let res = await axios.put(`https://personal-management-system-backend.onrender.com/admin/emp/user/${val._id}`, val, {withCredentials:true});
       setMessage(res.data.message);
       employee()// update the updated value in show in ui
       ClearForm()// clear the previce data
@@ -106,7 +106,7 @@ const EmployeeList = () => {
 
   // search 
   async function search(department) {
-    let res = await axios.get(`http://localhost:3000/admin/emp/user/${department}`, {withCredentials:true});
+    let res = await axios.get(`https://personal-management-system-backend.onrender.com/admin/emp/user/${department}`, {withCredentials:true});
     if(res.data.user.length == 0){
       setEmployees(res.data.user);
       setEmpty('No Employee is Empty');

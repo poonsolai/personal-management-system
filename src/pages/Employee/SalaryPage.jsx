@@ -17,7 +17,7 @@ const SalaryPage = () => {
   const [totalsalary, setTotalsalary] = useState([]);
   //get function
   async function getEmpSalary() {
-    const res = await axios.get(`http://localhost:3000/payslip/${user.name}`, {withCredentials:true});
+    const res = await axios.get(`https://personal-management-system-backend.onrender.com/payslip/${user.name}`, {withCredentials:true});
     if(!res.data.success){
       setEmpty(res.data.message);
       setTotalsalary(res.data.totalsalry);

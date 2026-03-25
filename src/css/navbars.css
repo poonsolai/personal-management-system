@@ -82,3 +82,8 @@
   }
 }
 
+.text span{
+  font-family:italic;
+  font-size: 50px;
+  color: darkmagenta;
+}

@@ -15,7 +15,7 @@ const SalaryPageAdmin = () => {
     const currentMonth = today.toLocaleString('default', { month: 'long' });
 
     async function fetchStatus() {
-        let res = await axios.get("http://localhost:3000/payslip/status", {withCredentials:true});
+        let res = await axios.get("hhttps://personal-management-system-backend.onrender.com/payslip/status", {withCredentials:true});
         setStatuss({...statuss, is_generate:res.data.ans.is_generate, is_paid:res.data.ans.is_paid});
     }
 
@@ -35,7 +35,7 @@ const SalaryPageAdmin = () => {
     
     const handleCreatePayslip = async () => {
         // Database update logic inga varum
-        const res =await axios.get("http://localhost:3000/payslip/createslip", {withCredentials:true});
+        const res =await axios.get("https://personal-management-system-backend.onrender.com/payslip/createslip", {withCredentials:true});
 
         if(!res.data.success){
             setStatus(res.data.message);
@@ -49,7 +49,7 @@ const SalaryPageAdmin = () => {
 
     const handleCompletePayment =async () => {
         // Database update logic inga varum
-        const res =await axios.patch("http://localhost:3000/payslip/credit", {withCredentials:true});
+        const res =await axios.patch("https://personal-management-system-backend.onrender.com/payslip/credit", {withCredentials:true});
         if(res.data.success){
             setStatus(res.data.status);
             setIsLocked(true); // Process mudinja odane auto-lock

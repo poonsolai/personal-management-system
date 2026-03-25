@@ -29,7 +29,7 @@ const LeavePage = () => {
   // get leaves in database 
   async function getLeave() {
     try{
-      let res = await axios.get(`http://localhost:3000/employee/leave/${user.name}`, {withCredentials:true});
+      let res = await axios.get(`https://personal-management-system-backend.onrender.com/employee/leave/${user.name}`, {withCredentials:true});
       if(res.data.success){
         setEty(false);
         setLeaves(res.data.leaves.reverse());
@@ -62,7 +62,7 @@ const LeavePage = () => {
       if(val.employee,val.fromDate,val.toDate,val.reason == ''){
         return alert("please all fields...")
       }
-      let res = await axios.post("http://localhost:3000/employee/leave", val, {withCredentials:true});
+      let res = await axios.post("https://personal-management-system-backend.onrender.com/employee/leave", val, {withCredentials:true});
       if(res.data.success){
           ClearForm();
           setShow(false);
@@ -83,7 +83,7 @@ const LeavePage = () => {
     getLeave()
     if(confirm("cancel your leave request ..")){
       try{
-      let res = await axios.delete(`http://localhost:3000/employee/leave/${id}`, {withCredentials:true});
+      let res = await axios.delete(`https://personal-management-system-backend.onrender.com/employee/leave/${id}`, {withCredentials:true});
         setMessage(res.data.message);
         CalLeave(leaves.length);//
         getLeave();//

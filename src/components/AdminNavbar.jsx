@@ -9,7 +9,7 @@ import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import axios from 'axios';
+
 const AdminNavbar = () => {
   
   const navigate = useNavigate();
@@ -32,12 +32,12 @@ const AdminNavbar = () => {
  
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-custom py-2 shadow-sm">
+    <nav className="navbar navbar-expand-lg navbar-custom py-0 shadow-sm">
       <div className="container-fluid px-4">
         {/* Logo Section */}
         <div className="navbar-brand d-flex align-items-center">
           <img src={logo} alt="" className='image me-4'/>
-          <h1 className=" text">POOKAL THOTTAM</h1>
+          <h1 className=" text"><span>I</span>nnovixus</h1>
         </div>
 
         {/* Mobile Toggle */}

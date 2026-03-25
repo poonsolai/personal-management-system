@@ -8,11 +8,11 @@ import { useEffect } from 'react';
 const TaskManager = () => {
   // get all employees
   async function employee() {
-      const res = await axios.get("http://localhost:3000/admin/emp/users", {withCredentials:true});
+      const res = await axios.get("https://personal-management-system-backend.onrender.com/admin/emp/users", {withCredentials:true});
       setEmployees(res.data.users);
     }
   async function gettasks() {
-    let res =await axios.get('http://localhost:3000/admin/task/', {withCredentials:true});
+    let res =await axios.get('https://personal-management-system-backend.onrender.com/admin/task/', {withCredentials:true});
     setTasks(res.data.tasks.reverse());
   }
   useEffect(()=>{
@@ -68,7 +68,7 @@ const TaskManager = () => {
       if(val.task,val.assign_to,val.status,val.deadline == ''){
         return alert("please all fields...")
       }
-      let res = await axios.post("http://localhost:3000/admin/task/new", val, {withCredentials:true});
+      let res = await axios.post("https://personal-management-system-backend.onrender.com/admin/task/new", val, {withCredentials:true});
       if(res.data.success){
           ClearForm();
           setShow(false);
@@ -94,7 +94,7 @@ const TaskManager = () => {
     e.preventDefault() // this is used to don't reload a page
 
     try{
-      let res = await axios.put(`http://localhost:3000/admin/task/${val._id}`, val, {withCredentials:true});
+      let res = await axios.put(`https://personal-management-system-backend.onrender.com/admin/task/${val._id}`, val, {withCredentials:true});
  
       setMessage(res.data.message);
       gettasks()// update the updated value in show in ui
@@ -119,7 +119,7 @@ const TaskManager = () => {
   // dynamic search for status
   async function StatusSearchFun(){
 
-    const res =await axios.get(`http://localhost:3000/admin/task/${searchvariable.employee}/${searchvariable.status}`, {withCredentials:true});
+    const res =await axios.get(`https://personal-management-system-backend.onrender.com/admin/task/${searchvariable.employee}/${searchvariable.status}`, {withCredentials:true});
       if(res.data.tasks.length == 0){
         setEty(true);
         setEmpty("Task Is Empty")
@@ -135,7 +135,7 @@ const TaskManager = () => {
   //remove task function
   async function removeTask(id){
     try{
-      const res = await axios.delete(`http://localhost:3000/admin/task/${id}`, {withCredentials:true});
+      const res = await axios.delete(`https://personal-management-system-backend.onrender.com/admin/task/${id}`, {withCredentials:true});
       if(res.data.success){
           gettasks()//
       }

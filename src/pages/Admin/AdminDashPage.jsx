@@ -9,7 +9,7 @@ const AdminDashboard = () => {
   //create local storage
 
   async function AllDatas() {
-    const res = await axios.get("http://localhost:3000/admin/dashbord", {withCredentials:true});
+    const res = await axios.get("https://personal-management-system-backend.onrender.com/admin/dashbord", {withCredentials:true});
     setlength(res.data.tasklength); // task total length 
     setAll({employees:res.data.employees, leaves:res.data.leaves, tasks:res.data.tasks});
   };

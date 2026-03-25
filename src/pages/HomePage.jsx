@@ -1,15 +1,15 @@
-
 import '../css/home.css';
 import { Link } from 'react-router-dom';
+import logo from '../assets/logo.png'
 const Home = () => {
   return (
-    <div className="landing-container">
+    <div className="container-fulid">
       {/* Navbar */}
-      <nav className="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm px-4">
-        <div className="container">
+      <nav className="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
+        <div className="container p-0">
+          <img src={logo} alt="" className='image'/>
           <a className="navbar-brand d-flex align-items-center fw-bold text-primary" href="#">
-            <div className="logo-square me-2"></div>
-            SPMS
+            <h1 className="text" style={{color:"gray", marginLeft:"10px"}}><span>I</span>nnovixus</h1>
           </a>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span className="navbar-toggler-icon"></span>
@@ -40,7 +40,7 @@ const Home = () => {
                 manage leaves, and monitor performance in one place.
               </p>
               <div className="d-flex justify-content-center gap-3">
-                <button className="btn btn-primary btn-lg px-5 py-3 shadow">Try for Free</button>
+                <Link className="btn btn-primary btn-lg px-5 py-3 shadow" to={'/signup'}>Try for Free</Link>
                 <button className="btn btn-light btn-lg px-5 py-3 border shadow-sm">Watch Demo</button>
               </div>
             </div>

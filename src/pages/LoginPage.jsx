@@ -32,7 +32,7 @@ const LoginPage = () => {
     }
     
     try{
-      let res = await axios.post('http://localhost:3000/auth/login', val, {withCredentials:true});
+      let res = await axios.post('https://personal-management-system-backend.onrender.com/auth/login', val, {withCredentials:true});
       
       if(res.data.success){
         setSuccess(res.data.message);
@@ -60,9 +60,9 @@ const LoginPage = () => {
   return (
     <div className="container d-flex justify-content-center align-items-center min-vh-100">
       <div className="card shadow-lg border-0 login-card w-100" style={{ maxWidth: '450px' }}>
-        <div className="card-header border-0 text-center py-4 bg-yellow" id='head'>
+        <div className="card-header border-0 text-center py-2 bg-yellow" id='head'>
           <img src={logo} alt="" className='image'/>
-          <h3 className="d-block fw-bold mb-1" id='head-text'>POOKAL THOTTAM </h3>
+          <h1 className="d-block fw-bold mb-1 text" id='head-text'><span>I</span>nnovixus</h1>
         </div>
         <div className="card-body ">
           <h3 className="text-center mb-4 fw-bold">Employee & Admin Login</h3>

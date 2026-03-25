@@ -29,12 +29,12 @@ const EmployeeNavbar = () => {
   }
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-custom py-2 shadow-sm">
+    <nav className="navbar navbar-expand-lg navbar-custom py-0 shadow-sm">
       <div className="container-fluid px-4">
 
         <div className="navbar-brand d-flex align-items-center"> 
           <img src={logo} alt="" className='image me-4'/>
-          <h1 className=" text">POOKAL THOTTAM</h1>
+          <h1 className=" text"><span>I</span>nnovixus</h1>
         </div>
 
         <button className="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#empNav">
