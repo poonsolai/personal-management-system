@@ -52,7 +52,7 @@ const SignUpPage = () => {
       if(res.data.success){
         setError(false);
         setMsg(res.data.message);
-        navigate('/');
+        navigate('/login');
       }else{
         setError(true);
         setErr(res.data.message);
