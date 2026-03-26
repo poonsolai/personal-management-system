@@ -22,10 +22,11 @@ const TaskPage = () => {
       if(res.data.success){
         setEty(false);
         return setTasks(res.data.task.reverse());
-      }else{
-        setEty(true);
-        setEmpty(res.data.message);
       }
+      // else{
+        // setEty(true);
+        // setEmpty(res.data.message);
+      // }
     }catch(err){
       console.log(err);
     }
@@ -33,6 +34,12 @@ const TaskPage = () => {
   // first time run the code
   useEffect(()=>{
     getTask()//call
+    //check tasks is empty or not
+    if(tasks.length == 0){
+      setEty(true);
+    }else{
+      setEty(false);
+    }
   }, []);
   
   return (

@@ -1,16 +1,14 @@
 import '../../css/dashbord.css'
 import { AuthContext } from '../../context/AuthContext';
 import { useContext, useEffect, useState } from 'react';
-import {Link} from 'react-router-dom'
 import axios from 'axios';
-import {useHideData2} from '../../hooks/useHideData';
 import {LeaveContext} from '../../context/LeaveContext'
 const EmployeeDashboard = () => {
 
   const {user} = useContext(AuthContext); //global variable for auth user
   const {totalleave, CalLeave} = useContext(LeaveContext); // total leaves 
   // empty 
-  const [empty, setEmpty] = useState('');
+  const [empty, setEmpty] = useState('is empty');
   const [ety, setEty] = useState(false);
   const [etyl, setEtyl] = useState(false);
   //check employee
@@ -38,27 +36,39 @@ const EmployeeDashboard = () => {
   // get all details in this employee
   async function getAllDetails() {
     let res = await axios.get(`https://personal-management-system-backend.onrender.com/employee/dashbord/${user.name}`, {withCredentials:true});
-    if(res.data.tasks.length == 0){
-      setEmpty(res.data.message);
-      setEty(true);
-      setUserdetails({...userdetails, leave : res.data.leaves.reverse()});
-      return;
-    }
-    if(res.data.leaves.length == 0){
-      setEmpty(res.data.message);
-      setEtyl(true);
-      setUserdetails({...userdetails, task : res.data.tasks.reverse()});
-      return;
-    }
-    setEtyl(false);
-    setEty(false);
+    // if(res.data.tasks.length == 0){
+    //   // setEmpty(res.data.message);
+    //   // setEty(true);
+    //   setUserdetails({...userdetails, leave : res.data.leaves.reverse()});
+    //   return;
+    // }
+    // if(res.data.leaves.length == 0){
+    //   setEmpty(res.data.message);
+    //   setEtyl(true);
+    //   setUserdetails({...userdetails, task : res.data.tasks.reverse()});
+    //   return;
+    // }
+    // setEtyl(false);
+    // setEty(false);
     setUserdetails({...userdetails, task : res.data.tasks.reverse(), leave : res.data.leaves.reverse()});
   }
   //first time run the code
   useEffect(()=>{
     checkEmployee();//
     getAllDetails();//
-  }, []);
+    // ckeck leaves empty or not
+    if(leaves.length == 0){
+      setEtyl(true);
+    }else{
+      setEtyl(false);
+    }
+    // ckeck task empty or not
+    if(task.length == 0){
+      setEty(true);
+    }else{
+      setEty(false);
+    }
+  }, [task, leaves]);
 
  const getStatusClass = (status) => {
     switch (status.toUpperCase()) {

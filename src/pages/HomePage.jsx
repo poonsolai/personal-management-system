@@ -5,7 +5,7 @@ const Home = () => {
   return (
     <div className="container-fulid">
       {/* Navbar */}
-      <nav className="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
+      <nav className="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm p-md-0 px-4 ">
         <div className="container p-0">
           <img src={logo} alt="" className='image'/>
           <a className="navbar-brand d-flex align-items-center fw-bold text-primary" href="#">
@@ -77,6 +77,11 @@ const Home = () => {
           </div>
         </div>
       </section>
+      {/* about */}
+      <div id="about" className='p-2 bg-dark text-white text-center '>
+        <h1 className=' text-center' style={{color:"#ca2a1e"}}>About</h1>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat praesentium expedita aliquid natus a at esse beatae, optio delectus amet, exercitationem voluptatibus rerum culpa quod impedit magnam tempore, fugit modi?</p>
+      </div>
     </div>
   );
 };

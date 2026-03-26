@@ -4,6 +4,7 @@ import useHideData from '../../hooks/useHideData';
 import useForm from '../../hooks/useForm';
 import { useEffect } from 'react';
 import axios from 'axios';
+import { faL } from '@fortawesome/free-solid-svg-icons';
 
 
 const EmployeeList = () => {
@@ -26,11 +27,17 @@ const EmployeeList = () => {
   //useing a custom hook for form
   const {val, handleForm,ClearForm, setVal} = useForm({name:"",email:"",role:"",department:"HR",salary:"",date:""}); 
   //empty 
-  const [empty, setEmpty] = useState('');
+  const [empty, setEmpty] = useState('is empty');
   const [ety, setEty] = useState(false);
   //
   useEffect(()=>{
-    employee();
+    employee();//call
+    //check emp is empty or not
+    if(employees.length == 0){
+      setEty(true);
+    }else{
+      setEty(false);
+    }
   },[]);
 
   // message

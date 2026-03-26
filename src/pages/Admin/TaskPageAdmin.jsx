@@ -36,7 +36,7 @@ const TaskManager = () => {
     // ithu add or update pannuroma nu find panni athuku ethmari btns and form ah correct panna use pannurom
   const [update, setUpdate] = useState(false);
   //empty 
-  const [empty, setEmpty] = useState('');
+  const [empty, setEmpty] = useState('is empty');
   const [ety, setEty] = useState(false);
 
 
@@ -114,6 +114,12 @@ const TaskManager = () => {
   useEffect(()=>{
     employee()// employee get function
     StatusSearchFun(); // search the task 
+    //check task is empty or not
+    if(tasks.length == 0){
+      setEty(true);
+    }else{
+      setEty(false);
+    }
   },[searchvariable.employee, searchvariable.status]) // first run and next this value change that time run this function
 
   // dynamic search for status
@@ -235,7 +241,7 @@ const TaskManager = () => {
               </tr>
             </thead>
             <tbody>
-              {tasks.slice(0, num).map((t) => (
+              {tasks && tasks.slice(0, num).map((t) => (
                 <tr key={t.id}>
                   <td className="fw-medium">{t.task}</td>
                   <td>{t.assign_to}</td>

@@ -9,27 +9,32 @@ const LeavePageAdmin = () => {
   //get all leaves in database
   async function loadLeaves() {
     const res = await axios.get("https://personal-management-system-backend.onrender.com/admin/leave", {withCredentials:true});
-    if(res.data.leaves.length == 0){
-      setEmpty("Leave Request is Empty");
-      setEty(true);
-      return;
-    }
+    // if(res.data.leaves.length == 0){
+    //   setEmpty("Leave Request is Empty");
+    //   setEty(true);
+    //   return;
+    // }
     setLeaveData(res.data.leaves.reverse());
-    setEty(false);
+    // setEty(false);
   }
-  useEffect(()=>{
-    loadLeaves()//call 
-  },[]);
-
   // state variavle for leavedata
   let [leaveData, setLeaveData] = useState([]);
   //empty 
-  const [empty, setEmpty] = useState('');
+  const [empty, setEmpty] = useState('Leave Request is Empty');
   const [ety, setEty] = useState(false);
 
   let pending = leaveData.filter((a)=>a.status === 'Pending');
   let rejected = leaveData.filter((a)=>a.status === 'Rejected');
   let approved = leaveData.filter((a)=>a.status === 'Approved');
+
+   useEffect(()=>{
+    loadLeaves()//call 
+    if(leaveData.length == 0){
+      setEty(true);
+    }else{
+      setEty(false);
+    }
+  },[]);
 
   // using custom hook for hide and view a dats
   const [num, viewAll, HideAll] = HideData(leaveData);
@@ -117,7 +122,7 @@ const LeavePageAdmin = () => {
               </tr>
             </thead>
             <tbody>
-              {leaveData.slice(0,num).map((item) => (
+              {leaveData && leaveData.slice(0,num).map((item) => (
                 <tr key={item._id}>
                   <td>{item.employee}</td>
                   <td>{item.fromDate}</td>

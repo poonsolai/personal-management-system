@@ -8,7 +8,7 @@ import useForm from '../hooks/useForm'; //custom hook
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
-
+import Load from '../components/Load';
 const LoginPage = () => {
   //global variable useing
   const {user, login} = useContext(AuthContext);
@@ -19,6 +19,8 @@ const LoginPage = () => {
   // error msg variable 
   const [err, setErr] = useState(false);
   // success msg variable
+  // error msg show panna use pannurom
+  const [load,setLoad] = useState(false);
   const [success, setSuccess] = useState(false);
   //state variable for manage the input value using cutom hook
   const {val, handleForm} = useForm({mail:"", password:""});
@@ -33,7 +35,7 @@ const LoginPage = () => {
     
     try{
       let res = await axios.post('https://personal-management-system-backend.onrender.com/auth/login', val, {withCredentials:true});
-      
+      setLoad(true);
       if(res.data.success){
         setSuccess(res.data.message);
         setError(false);
@@ -52,7 +54,7 @@ const LoginPage = () => {
     }catch(err){
       console.log(err);
     }finally{
-      
+      setLoad(false);
     }
   }
  
@@ -66,6 +68,9 @@ const LoginPage = () => {
         </div>
         <div className="card-body ">
           <h3 className="text-center mb-4 fw-bold">Employee & Admin Login</h3>
+          {
+            load && <Load />
+          }
           <form>
             <div className="mb-3">
               <label className="form-label small fw-bold">Email Address</label>

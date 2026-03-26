@@ -21,7 +21,7 @@ const LeavePage = () => {
   // use custom hook useing for form
   const {val, handleForm, ClearForm} = useForm({employee:user.name, fromDate:"", toDate:"", reason:"", status: "Pending"});
   //empty 
-  const [empty, setEmpty] = useState('');
+  const [empty, setEmpty] = useState('is empty');
   const [ety, setEty] = useState(false);
 
   CalLeave(leaves.length);
@@ -31,13 +31,13 @@ const LeavePage = () => {
     try{
       let res = await axios.get(`https://personal-management-system-backend.onrender.com/employee/leave/${user.name}`, {withCredentials:true});
       if(res.data.success){
-        setEty(false);
+        // setEty(false);
         setLeaves(res.data.leaves.reverse());
         return ;
       }else{
-        setEmpty(res.data.message);
+        // setEmpty(res.data.message);
         setLeaves(res.data.leaves);
-        setEty(true);
+        // setEty(true);/
       }
     }catch(err){
       console.log(err);
@@ -46,7 +46,13 @@ const LeavePage = () => {
   // run first time only
   useEffect(()=>{
     getLeave()//call
-  }, []);
+    // ckeck leaves empty or not
+    if(leaves.length == 0){
+      setEty(true);
+    }else{
+      setEmpty(false);
+    }
+  }, [leaves]);
   // show form
   function SendRequestForm(){
     setShow(!show);

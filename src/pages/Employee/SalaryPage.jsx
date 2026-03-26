@@ -9,7 +9,7 @@ const SalaryPage = () => {
 
   const {user} = useContext(AuthContext); //global variable for auth user
   //empty 
-  const [empty, setEmpty] = useState('');
+  const [empty, setEmpty] = useState('is empty');
   const [ety, setEty] = useState(false);
   // salary details
   const [salary, setSalary] = useState([]);
@@ -18,19 +18,25 @@ const SalaryPage = () => {
   //get function
   async function getEmpSalary() {
     const res = await axios.get(`https://personal-management-system-backend.onrender.com/payslip/${user.name}`, {withCredentials:true});
-    if(!res.data.success){
-      setEmpty(res.data.message);
-      setTotalsalary(res.data.totalsalry);
-      setEty(true);
-      return; 
-    }
-    setEty(false);
+    // if(!res.data.success){
+    //   setEmpty(res.data.message);
+    //   setTotalsalary(res.data.totalsalry);
+    //   setEty(true);
+    //   return; 
+    // }
+    // setEty(false);
     setTotalsalary(res.data.totalsalry);
     setSalary(res.data.payslip);
   };
 
   useEffect(()=>{
     getEmpSalary()//call
+    //ckeck salary slip empty or not
+    if(salary.length == 0){
+      setEty(true);
+    }else{
+      setEty(false);
+    }
   }, []);
   
 
