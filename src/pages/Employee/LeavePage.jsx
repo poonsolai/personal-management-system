@@ -6,7 +6,8 @@ import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import {LeaveContext} from '../../context/LeaveContext';
 import useForm from '../../hooks/useForm';
-
+import api from '../../hooks/api';
+import CheckEmpty from '../../hooks/useEmpty.js'
 const LeavePage = () => {
   //total balance leavecount
   const {totalleave, CalLeave} = useContext(LeaveContext);
@@ -24,12 +25,12 @@ const LeavePage = () => {
   const [empty, setEmpty] = useState('is empty');
   const [ety, setEty] = useState(false);
 
-  CalLeave(leaves.length);
+  CalLeave(leaves?.length);
 
   // get leaves in database 
   async function getLeave() {
     try{
-      let res = await axios.get(`https://personal-management-system-backend.onrender.com/employee/leave/${user.name}`, {withCredentials:true});
+      let res = await axios.get(`${api}/employee/leave/${user.name}`, {withCredentials:true});
       if(res.data.success){
         // setEty(false);
         setLeaves(res.data.leaves.reverse());
@@ -43,16 +44,15 @@ const LeavePage = () => {
       console.log(err);
     }
   }
-  // run first time only
+  
   useEffect(()=>{
     getLeave()//call
-    // ckeck leaves empty or not
-    if(leaves.length == 0){
-      setEty(true);
-    }else{
-      setEmpty(false);
-    }
-  }, [leaves]);
+  }, []); // run first time only
+
+  useEffect(()=>{
+    CheckEmpty(leaves, setEty);
+  }, [leaves]); // every time change salary value 
+
   // show form
   function SendRequestForm(){
     setShow(!show);
@@ -68,30 +68,29 @@ const LeavePage = () => {
       if(val.employee,val.fromDate,val.toDate,val.reason == ''){
         return alert("please all fields...")
       }
-      let res = await axios.post("https://personal-management-system-backend.onrender.com/employee/leave", val, {withCredentials:true});
+      let res = await axios.post(`${api}/employee/leave`, val, {withCredentials:true});
       if(res.data.success){
           ClearForm();
           setShow(false);
           setMessage(res.data.message);
           getLeave();//
+          CheckEmpty(leaves, setEty);//
       }else{
         setShow(true);
         setMessage(res.data.message);
-        set
       }
-      
       }catch(err){
         console.log(err);
     }
   }
   // cancel a leave request 
   async function deleteRequest(id){
-    getLeave()
+    getLeave();
     if(confirm("cancel your leave request ..")){
       try{
-      let res = await axios.delete(`https://personal-management-system-backend.onrender.com/employee/leave/${id}`, {withCredentials:true});
+      let res = await axios.delete(`${api}/employee/leave/${id}`, {withCredentials:true});
         setMessage(res.data.message);
-        CalLeave(leaves.length);//
+        CalLeave(leaves?.length);//
         getLeave();//
       }catch(err){
         console.log(err);
@@ -114,13 +113,13 @@ const LeavePage = () => {
         <div className="col-12 col-md-4">
           <div className="stat-card green-card shadow-sm">
             <p>Approved Leave Days</p>
-            <h3>{leaves && leaves.filter((l)=>l.status.toLowerCase() == "approved").length} <span>Days</span></h3>
+            <h3>{leaves && leaves.filter((l)=>l.status?.toLowerCase() == "approved").length} <span>Days</span></h3>
           </div>
         </div>
         <div className="col-12 col-md-4">
           <div className="stat-card blue-card shadow-sm">
             <p>Pending Leave Days</p>
-            <h3>{leaves && leaves.filter((l)=>l.status.toLowerCase() == "pending").length} <span>Days</span></h3>
+            <h3>{leaves && leaves.filter((l)=>l.status?.toLowerCase() == "pending").length} <span>Days</span></h3>
           </div>
         </div>
       </div>
@@ -164,13 +163,15 @@ const LeavePage = () => {
         </div>
       }
         <div className="table-responsive table-bordered table-hover ">
-          <table className="table align-middle custom-table">
+          <table className="table align-middle custom-table ">
             <thead>
               <tr>
-                <th>From-To</th>
-                <th>Reason</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th className=' bg-primary text-light ' style={{width:"19%", whiteSpace:"nowrap"}}>From-To</th>
+                <th className=' bg-primary text-light'>Reason</th>
+                <th className=' bg-primary text-light'>Status</th>
+                <th className=' bg-primary text-light'>TIME</th>
+                <th className=' bg-primary text-light' style={{width:"19%", whiteSpace:"nowrap"}}>DATE</th>
+                <th className=' bg-primary text-light'>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -184,6 +185,8 @@ const LeavePage = () => {
                         {leave.status}
                       </span>
                     </td>
+                    <td>{leave.time}</td>
+                    <td>{leave.date}</td>
                     {
                       leave.status == "Approved" || leave.status == "Rejected"? <td> <FontAwesomeIcon icon={faEllipsis}></FontAwesomeIcon></td> : <td><span className='badge bg-danger px-3 py-2 cursor-pointer' onClick={()=>{deleteRequest(leave._id)}}>cancel</span></td>
                     }

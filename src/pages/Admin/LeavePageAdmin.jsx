@@ -2,13 +2,14 @@ import { useState, useEffect} from 'react';
 import './css/leaveAdmin.css'
 import HideData from '../../hooks/useHideData';
 import axios from 'axios';
-
+import api from '../../hooks/api';
+import CheckEmpty from '../../hooks/useEmpty';
 const LeavePageAdmin = () => {
 
 
   //get all leaves in database
   async function loadLeaves() {
-    const res = await axios.get("https://personal-management-system-backend.onrender.com/admin/leave", {withCredentials:true});
+    const res = await axios.get(`${api}/admin/leave`, {withCredentials:true});
     // if(res.data.leaves.length == 0){
     //   setEmpty("Leave Request is Empty");
     //   setEty(true);
@@ -28,26 +29,26 @@ const LeavePageAdmin = () => {
   let approved = leaveData.filter((a)=>a.status === 'Approved');
 
    useEffect(()=>{
-    loadLeaves()//call 
-    if(leaveData.length == 0){
-      setEty(true);
-    }else{
-      setEty(false);
-    }
+    loadLeaves();//call 
+    CheckEmpty(leaveData, setEty); 
   },[]);
 
+   useEffect(()=>{
+      CheckEmpty(leaveData, setEty);  
+  }, [leaveData]);
+  
   // using custom hook for hide and view a dats
   const [num, viewAll, HideAll] = HideData(leaveData);
   //approve function
   async function approvedFunc(id, action){
-    let res = await axios.patch(`https://personal-management-system-backend.onrender.com/admin/leave/${id}`,{action:action}, {withCredentials:true});
+    let res = await axios.patch(`${api}/admin/leave/${id}`,{action:action}, {withCredentials:true});
     if(res.data.success){
       loadLeaves();
     }
   }
   // reject function
   async function rejectedFunc(id, action){
-    let res = await axios.patch(`https://personal-management-system-backend.onrender.com/admin/leave/${id}`,{action:action}, {withCredentials:true});
+    let res = await axios.patch(`${api}/admin/leave/${id}`,{action:action}, {withCredentials:true});
     if(res.data.success){
       loadLeaves();
     }
@@ -100,11 +101,15 @@ const LeavePageAdmin = () => {
         <div className="card-header bg-white py-3">
           <h5 className="mb-0">Leave Requests</h5>
           {/* view data btn */}
-          <div className="view">
             {
-              num == 4 ? <button className='btn btn-secondary px-3' onClick={viewAll}>View all</button> : <button className='btn btn-secondary px-3' onClick={HideAll}>Hide</button>
-            }    
-          </div>
+              leaveData.length > 4 && 
+              <div className="view">
+                {
+                  num == 4 ? <button className='btn btn-secondary px-3' onClick={viewAll}>View all</button> : <button className='btn btn-secondary px-3' onClick={HideAll}>Hide</button>
+                }    
+              </div>
+            }
+            
         </div>
         {/* view data btn */}
         
@@ -112,13 +117,13 @@ const LeavePageAdmin = () => {
           <table className="table align-middle mb-0">
             <thead className="table-light">
               <tr>
-                <th>Employee</th>
+                <th className=' bg-secondary text-light'>Employee</th>
                 {/* <th>Leave Type</th> */}
-                <th>From Date</th>
-                <th>To Date</th>
-                <th>Reason</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th className=' bg-secondary text-light'>From Date</th>
+                <th className=' bg-secondary text-light'>To Date</th>
+                <th className=' bg-secondary text-light'>Reason</th>
+                <th className=' bg-secondary text-light'>Status</th>
+                <th className=' bg-secondary text-light'>Actions</th>
               </tr>
             </thead>
             <tbody>

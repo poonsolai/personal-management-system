@@ -1,17 +1,31 @@
 import '../../css/dashbord.css'
-import { useContext } from 'react';
 import axios from 'axios'
 import { useEffect } from 'react';
 import { useState } from 'react';
-
+import api from '../../hooks/api';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 const AdminDashboard = () => {
+  const {user ,logout} = useContext(AuthContext); // global variable
+  const Navigate = useNavigate()// auto navigate function
   const [length, setlength] = useState(0);
-  //create local storage
 
   async function AllDatas() {
-    const res = await axios.get("https://personal-management-system-backend.onrender.com/admin/dashbord", {withCredentials:true});
-    setlength(res.data.tasklength); // task total length 
-    setAll({employees:res.data.employees, leaves:res.data.leaves, tasks:res.data.tasks});
+    try{
+      const res = await axios.get(`${api}/admin/dashbord`, {withCredentials:true}); // get all details (emp, task, leaves)
+      setlength(res.data.tasklength); // task total length 
+      setAll({employees:res.data.employees, leaves:res.data.leaves, tasks:res.data.tasks});
+
+      const res2 = await axios.get(`${api}/admin/dashbord/check/${user.name}`, {withCredentials:true});
+      if(res2.data.user?.length == 0){
+        logout(); // if user delete in database that time delete also local storage
+        Navigate('/');
+      }
+
+    }catch(err){
+      console.log(err);
+    }
   };
   
   useEffect(()=>{
@@ -20,7 +34,7 @@ const AdminDashboard = () => {
 
    const [all, setAll] = useState({employees:"", leaves:"", tasks:"",tlength:''})
  
-   let percentage = (Number(all.tasks.length)/Number(length))*100;
+   let percentage = (Number(all.tasks.length)/Number(length))*100  || 0 ;
    
    let monthlypayout = 0;
 

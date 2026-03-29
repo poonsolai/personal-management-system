@@ -4,15 +4,16 @@ import useForm from '../../hooks/useForm';
 import useHideData from '../../hooks/useHideData';
 import axios from 'axios'
 import { useEffect } from 'react';
-
+import api from '../../hooks/api';
+import checkEmpty from '../../hooks/useEmpty.js';
 const TaskManager = () => {
   // get all employees
   async function employee() {
-      const res = await axios.get("https://personal-management-system-backend.onrender.com/admin/emp/users", {withCredentials:true});
+      const res = await axios.get(`${api}/admin/emp/users`, {withCredentials:true});
       setEmployees(res.data.users);
     }
   async function gettasks() {
-    let res =await axios.get('https://personal-management-system-backend.onrender.com/admin/task/', {withCredentials:true});
+    let res =await axios.get(`${api}/admin/task/`, {withCredentials:true});
     setTasks(res.data.tasks.reverse());
   }
   useEffect(()=>{
@@ -68,12 +69,13 @@ const TaskManager = () => {
       if(val.task,val.assign_to,val.status,val.deadline == ''){
         return alert("please all fields...")
       }
-      let res = await axios.post("https://personal-management-system-backend.onrender.com/admin/task/new", val, {withCredentials:true});
+      let res = await axios.post(`${api}/admin/task/new`, val, {withCredentials:true});
       if(res.data.success){
           ClearForm();
           setShow(false);
           setMessage(res.data.message);
           gettasks();//
+        
       }else{
         setShow(true);
         setMessage(res.data.message);
@@ -90,12 +92,10 @@ const TaskManager = () => {
     setVal(task);
   }
   //update function
-  async function updateEmp(e){
+  async function updateSTatus(e){
     e.preventDefault() // this is used to don't reload a page
-
     try{
-      let res = await axios.put(`https://personal-management-system-backend.onrender.com/admin/task/${val._id}`, val, {withCredentials:true});
- 
+      let res = await axios.put(`${api}/admin/task/${val._id}`, val, {withCredentials:true});
       setMessage(res.data.message);
       gettasks()// update the updated value in show in ui
       ClearForm()// clear the previce data
@@ -114,18 +114,16 @@ const TaskManager = () => {
   useEffect(()=>{
     employee()// employee get function
     StatusSearchFun(); // search the task 
-    //check task is empty or not
-    if(tasks.length == 0){
-      setEty(true);
-    }else{
-      setEty(false);
-    }
+    checkEmpty(tasks, setEty);
   },[searchvariable.employee, searchvariable.status]) // first run and next this value change that time run this function
 
+  useEffect(()=>{
+      checkEmpty(tasks, setEty);  
+  }, [tasks]);
   // dynamic search for status
   async function StatusSearchFun(){
 
-    const res =await axios.get(`https://personal-management-system-backend.onrender.com/admin/task/${searchvariable.employee}/${searchvariable.status}`, {withCredentials:true});
+    const res =await axios.get(`${api}/admin/task/${searchvariable.employee}/${searchvariable.status}`, {withCredentials:true});
       if(res.data.tasks.length == 0){
         setEty(true);
         setEmpty("Task Is Empty")
@@ -140,13 +138,15 @@ const TaskManager = () => {
 
   //remove task function
   async function removeTask(id){
-    try{
-      const res = await axios.delete(`https://personal-management-system-backend.onrender.com/admin/task/${id}`, {withCredentials:true});
-      if(res.data.success){
-          gettasks()//
+    if(confirm('Delete a task')){
+      try{
+        const res = await axios.delete(`${api}/admin/task/${id}`, {withCredentials:true});
+        if(res.data.success){
+            gettasks()//
+        }
+      }catch(err){
+        console.log(err)
       }
-    }catch(err){
-      console.log(err)
     }
   }
 
@@ -184,11 +184,14 @@ const TaskManager = () => {
       </div>
       <p className='message'>{message}</p>
       {/* view data btn */}
-          <div className="view">
+          {
+            tasks.length > 4 ? 
+            <div className="view">
             {
               num == 4 ? <button className='btn btn-secondary px-3' onClick={viewAll}>View all</button> : <button className='btn btn-secondary px-3' onClick={HideAll}>Hide</button>
             }    
-          </div>
+          </div> : ""
+          }
 
       {/* Add Tasks Form */}
       {
@@ -217,7 +220,7 @@ const TaskManager = () => {
             </div>
             <div className="col-md-12" id='btn'>
               {
-                !update ? <button className='btn btn-success px-5 py-2' onClick={AddedTask}>Add Employee</button> : <button className='btn btn-success px-5 py-2' onClick={updateEmp}>Update Employee</button>
+                !update ? <button className='btn btn-success px-5 py-2' onClick={AddedTask}>Add Task</button> : <button className='btn btn-success px-5 py-2' onClick={updateSTatus}>Update Task</button>
               }
               <button className='btn btn-danger px-5 py-2' onClick={CancelTaskForm}>Cancel</button>
             </div>
@@ -233,11 +236,11 @@ const TaskManager = () => {
           <table className="table align-middle">
             <thead className="text-secondary small">
               <tr>
-                <th>Task</th>
-                <th>Assigned To</th>
-                <th>Status</th>
-                <th>Deadline</th>
-                <th>Actions</th>
+                <th className=' bg-secondary text-light'>Task</th>
+                <th className=' bg-secondary text-light'>Assigned To</th>
+                <th className=' bg-secondary text-light'>Status</th>
+                <th className=' bg-secondary text-light'>Deadline</th>
+                <th className=' bg-secondary text-light'>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -252,7 +255,7 @@ const TaskManager = () => {
                   </td>
                   <td>{t.deadline}</td>
                   <td>
-                    <button className="btn btn-primary btn-sm me-2 px-3" onClick={()=>{editEmp(t)}}>Edit</button>
+                    <button className="btn btn-primary btn-sm me-2 px-3" onClick={()=>{editEmp(t)}} disabled={t.status == "Completed"}>Edit</button>
                     <button className="btn btn-danger btn-sm px-2" onClick={()=>{removeTask(t._id)}}>
                         <i className="bi bi-trash"></i> 🗑️
                     </button>

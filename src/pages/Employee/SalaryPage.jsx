@@ -4,40 +4,39 @@ import './css/salary.css';
 import { useEffect } from 'react';
 import axios from "axios";
 import { useState } from 'react';
-
+import api from '../../hooks/api';
+import CheckEmpty from '../../hooks/useEmpty';
 const SalaryPage = () => {
 
   const {user} = useContext(AuthContext); //global variable for auth user
   //empty 
-  const [empty, setEmpty] = useState('is empty');
+  const [empty] = useState('is empty');
   const [ety, setEty] = useState(false);
   // salary details
   const [salary, setSalary] = useState([]);
   // total salary
   const [totalsalary, setTotalsalary] = useState([]);
+
   //get function
   async function getEmpSalary() {
-    const res = await axios.get(`https://personal-management-system-backend.onrender.com/payslip/${user.name}`, {withCredentials:true});
-    // if(!res.data.success){
-    //   setEmpty(res.data.message);
-    //   setTotalsalary(res.data.totalsalry);
-    //   setEty(true);
-    //   return; 
-    // }
-    // setEty(false);
-    setTotalsalary(res.data.totalsalry);
-    setSalary(res.data.payslip);
+    try{
+      const res = await axios.get(`${api}/payslip/${user.name}`, {withCredentials:true});
+      setTotalsalary(res.data.totalsalry);
+      setSalary(res.data.payslip);
+    }catch(err){
+      console.log(err);
+    }
   };
 
   useEffect(()=>{
     getEmpSalary()//call
-    //ckeck salary slip empty or not
-    if(salary.length == 0){
-      setEty(true);
-    }else{
-      setEty(false);
-    }
-  }, []);
+    CheckEmpty(salary, setEty);
+  }, []); // first time only 
+
+  useEffect(()=>{
+    getEmpSalary()//call
+    CheckEmpty(salary, setEty);
+  }, [salary]); // every time change salary value 
   
 
 
@@ -62,13 +61,13 @@ const SalaryPage = () => {
           <table className="table custom-salary-table align-middle">
             <thead>
               <tr>
-                <th>Month</th>
-                <th>Basic Pay</th>
-                <th>HRA</th>
-                <th>Other Allowances</th>
-                <th>Deductions</th>
-                <th>Net Salary</th>
-                <th>Actions</th>
+                <th className=' bg-primary text-light'>MONTH</th>
+                <th className=' bg-primary text-light'>BASIC PAY</th>
+                <th className=' bg-primary text-light'>HRA</th>
+                <th className=' bg-primary text-light'>OTHER ALLOWANCES</th>
+                <th className=' bg-primary text-light'> DEDUCTIONS </th>
+                <th className=' bg-primary text-light'>NET SALARY</th>
+                <th className=' bg-primary text-light'>ACTIONS</th>
               </tr>
             </thead>
             <tbody>
@@ -77,11 +76,11 @@ const SalaryPage = () => {
                   <td className="fw-bold text-muted">{item.month}</td>
                   <td>${item.basic}</td>
                   <td>${item.hra}</td>
-                  <td>${item.other}</td>
+                  <td style={{width:"15%", whiteSpace:"nowrap"}}>${item.other}</td>
                   <td>${item.deduct}</td>
                   <td className="fw-bold text-dark">${item.net}</td>
                   <td>
-                    <button className="btn btn-view-custom btn-sm px-4">View</button>
+                    <button className="btn btn-view-custom btn-sm px-4" style={{backgroundColor:item.status == 'Paid' ? "green" : "orange"}}>{item.status}</button>
                   </td>
                 </tr>
               ))}
@@ -94,11 +93,13 @@ const SalaryPage = () => {
           }
         </div>
         {
-          !ety && 
+          salary.length > 4 &&
             <div className="text-end mt-1">
-              <button className="btn btn-yellow-action px-4 py-2 fw-bold shadow-sm">
-                View All Payslips
-              </button>
+              { !ety && 
+                <button className="btn btn-yellow-action px-4 py-2 fw-bold shadow-sm">
+                  View All Payslips
+                </button>
+              }
             </div>
         }
       </div>

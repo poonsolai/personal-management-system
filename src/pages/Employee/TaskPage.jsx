@@ -3,22 +3,22 @@ import './css/task.css';
 import { AuthContext } from '../../context/AuthContext';
 import axios from 'axios';
 import {useHideData2} from '../../hooks/useHideData';
-
+import api from '../../hooks/api';
+import CheckEmpty from '../../hooks/useEmpty';
 const TaskPage = () => {
 
   const {user} = useContext(AuthContext)// global variable for auth user
   // all task store this state variable
   const [tasks, setTasks] = useState([]);
   //empty 
-  const [empty, setEmpty] = useState('');
+  const [empty, setEmpty] = useState('is empty');
   const [ety, setEty] = useState(false);
   // custom hook use by hide task and unhide a task
   const [num, viewAll, HideAll] = useHideData2(tasks);
-
   // task get function 
   async function getTask() {
     try{
-      let res = await axios.get(`https://personal-management-system-backend.onrender.com/employee/task/${user.name}`, {withCredentials:true});
+      let res = await axios.get(`${api}/employee/task/${user.name}`, {withCredentials:true});
       if(res.data.success){
         setEty(false);
         return setTasks(res.data.task.reverse());
@@ -34,13 +34,12 @@ const TaskPage = () => {
   // first time run the code
   useEffect(()=>{
     getTask()//call
-    //check tasks is empty or not
-    if(tasks.length == 0){
-      setEty(true);
-    }else{
-      setEty(false);
-    }
+    CheckEmpty(tasks, setEty);
   }, []);
+
+  useEffect(()=>{
+    CheckEmpty(tasks, setEty);
+  }, [tasks]);
   
   return (
     <div className="container-fluid py-4 task-page px-4">
@@ -75,7 +74,7 @@ const TaskPage = () => {
             <div className="d-flex justify-content-between align-items-center">
               <div>
                 <p className="mb-1 opacity-75">Task Completion Rate</p>
-                <h2 className="display-5 fw-bold mb-0">{((tasks.filter((t)=> t.status.toLowerCase() == 'completed').length)/(tasks.length)*100).toFixed(0)}<span className="h4">%</span></h2>
+                <h2 className="display-5 fw-bold mb-0">{((tasks.filter((t)=> t.status.toLowerCase() == 'completed').length)/(tasks.length)*100).toFixed(0) } <span className="h4">%</span></h2>
               </div>
               <div className="icon-overlay">◔</div>
             </div>
@@ -86,14 +85,14 @@ const TaskPage = () => {
       {/* Task List Card */}
       <div className="card border-0 shadow-sm task-container p-4">
         <h4 className="mb-4 fw-bold">My Tasks</h4>
-        <div className="table-responsive">
+        <div className="table-responsive table-bordered table-hover">
           <table className="table align-middle custom-task-table">
             <thead>
               <tr>
-                <th>Task</th>
-                <th>Assigned By</th>
-                <th>Status</th>
-                <th>Deadline</th>
+                <th className=' bg-primary text-light'>TASK</th>
+                <th className=' bg-primary text-light'>ASSIGNED BY</th>
+                <th className=' bg-primary text-light'>STATUS</th>
+                <th className=' bg-primary text-light'>DEADLINE</th>
               </tr>
             </thead>
             <tbody>
@@ -117,14 +116,16 @@ const TaskPage = () => {
             </p>
           }
         </div>
-        {
-          !ety && 
-          <div className="text-end mt-4">
-            {
-              num == 2 ? <button className="btn btn-yellow-action px-5 py-2 fw-bold shadow-sm" onClick={viewAll}>View All Tasks</button> : <button className="btn btn-yellow-action px-5 py-2 fw-bold shadow-sm" onClick={HideAll}>Hide  Tasks</button>
-            }
-          </div>
-        }
+        <div>
+          {
+            !ety && tasks.length > 2 &&
+            <div className="text-end mt-4">
+              {
+                num == 2 ? <button className="btn btn-yellow-action px-5 py-2 fw-bold shadow-sm" onClick={viewAll}>View All Tasks</button> : <button className="btn btn-yellow-action px-5 py-2 fw-bold shadow-sm" onClick={HideAll}>Hide  Tasks</button>
+              }
+            </div>
+          }
+        </div>
       </div>
     </div>
   );

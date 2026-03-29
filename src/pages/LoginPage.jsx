@@ -9,9 +9,11 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import Load from '../components/Load';
+ import api from '../hooks/api';
+ 
 const LoginPage = () => {
   //global variable useing
-  const {user, login} = useContext(AuthContext);
+  const {login} = useContext(AuthContext);
   //navigate route automatically for login page
   const navigate = useNavigate();
   // error msg show panna use pannurom
@@ -24,24 +26,23 @@ const LoginPage = () => {
   const [success, setSuccess] = useState(false);
   //state variable for manage the input value using cutom hook
   const {val, handleForm} = useForm({mail:"", password:""});
-  
+  // true 
+  const [btn, setBtn] = useState(false);
   //submit the data for backend
   async function submitData(e){
     e.preventDefault();
+    setLoad(true); // load component show
     const {mail, password} = val;
-    if(mail == "" || password == ""){
-      setErr("fill all filed");
-    }
-    
+
     try{
-      let res = await axios.post('https://personal-management-system-backend.onrender.com/auth/login', val, {withCredentials:true});
-      setLoad(true);
+      let res = await axios.post(`${api}/auth/login`, val, {withCredentials:true});
+      setBtn(true);
       if(res.data.success){
         setSuccess(res.data.message);
         setError(false);
         login(res.data.user); // user data store in global variable
-        // localStorage la save the user
-        localStorage.setItem('user',JSON.stringify(res.data.user));
+        localStorage.setItem('user',JSON.stringify(res.data.user)); // localStorage la save the user
+        
         if(res.data.user.role == "admin"){
           navigate('/admin/dashbord')
         }else{
@@ -55,6 +56,7 @@ const LoginPage = () => {
       console.log(err);
     }finally{
       setLoad(false);
+      setBtn(false);
     }
   }
  
@@ -98,7 +100,7 @@ const LoginPage = () => {
             <div>
               { error ? <p style={{color:"red"}}>{err}</p> : <p style={{color:"green"}}> {success}</p> }
             </div>
-            <button type="submit" className="btn btn-yellow w-100 py-2 fw-bold shadow-sm mt-3on" onClick={submitData}>Login</button>
+            <button type="submit" className="btn btn-yellow w-100 py-2 fw-bold shadow-sm mt-3on" onClick={submitData} disabled={btn}>Login</button>
           </form>
           <p className="text-center mt-4 small">
             Don't have an account? <Link className="text-primary fw-bold cursor-pointer un" to={'/signup'}>Sign Up</Link>

@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/salaryAdmin.css';
 import lock from '../../assets/lock.png'
 import axios from 'axios';
-
+import api from '../../hooks/api';
 const SalaryPageAdmin = () => {
     const [isLocked, setIsLocked] = useState(false);
     const [status, setStatus] = useState('Not Set'); // Status: Not Set, Pending, Paid
@@ -15,7 +15,7 @@ const SalaryPageAdmin = () => {
     const currentMonth = today.toLocaleString('default', { month: 'long' });
 
     async function fetchStatus() {
-        let res = await axios.get("hhttps://personal-management-system-backend.onrender.com/payslip/status", {withCredentials:true});
+        let res = await axios.get(`${api}/payslip/status`, {withCredentials:true});
         setStatuss({...statuss, is_generate:res.data.ans.is_generate, is_paid:res.data.ans.is_paid});
     }
 
@@ -35,7 +35,7 @@ const SalaryPageAdmin = () => {
     
     const handleCreatePayslip = async () => {
         // Database update logic inga varum
-        const res =await axios.get("https://personal-management-system-backend.onrender.com/payslip/createslip", {withCredentials:true});
+        const res =await axios.get(`${api}/payslip/createslip`, {withCredentials:true});
 
         if(!res.data.success){
             setStatus(res.data.message);
@@ -49,7 +49,7 @@ const SalaryPageAdmin = () => {
 
     const handleCompletePayment =async () => {
         // Database update logic inga varum
-        const res =await axios.patch("https://personal-management-system-backend.onrender.com/payslip/credit", {withCredentials:true});
+        const res =await axios.patch(`${api}/payslip/credit`, {withCredentials:true});
         if(res.data.success){
             setStatus(res.data.status);
             setIsLocked(true); // Process mudinja odane auto-lock
@@ -108,10 +108,10 @@ const SalaryPageAdmin = () => {
                         <table className="table table-hover align-middle border">
                             <thead className="table-light">
                                 <tr>
-                                    <th>Employee</th>
-                                    <th>Amount</th>
-                                    <th>Status</th>
-                                    <th>Generate Date</th>
+                                    <th className=' bg-secondary text-light'>Employee</th>
+                                    <th className=' bg-secondary text-light'>Amount</th>
+                                    <th className=' bg-secondary text-light'>Status</th>
+                                    <th className=' bg-secondary text-light'>Generate Date</th>
                                 </tr>
                             </thead>
                             <tbody>

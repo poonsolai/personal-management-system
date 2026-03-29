@@ -1,6 +1,7 @@
 import '../css/home.css';
 import { Link } from 'react-router-dom';
-import logo from '../assets/logo.png'
+import logo from '../assets/logo.png';
+import vid from '../assets/vid.mp4';
 const Home = () => {
   return (
     <div className="container-fulid">
@@ -41,13 +42,13 @@ const Home = () => {
               </p>
               <div className="d-flex justify-content-center gap-3">
                 <Link className="btn btn-primary btn-lg px-5 py-3 shadow" to={'/signup'}>Try for Free</Link>
-                <button className="btn btn-light btn-lg px-5 py-3 border shadow-sm">Watch Demo</button>
+                <button className="btn btn-light btn-lg px-5 py-3 border shadow-sm abs" >Watch Demo</button>
               </div>
             </div>
           </div>
         </div>
       </header>
-
+      
       {/* Features Preview */}
       <section id="features" className="py-5 bg-light">
         <div className="container py-5 text-center">

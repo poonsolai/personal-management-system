@@ -69,4 +69,23 @@
     .btn-primary{
         margin-top: 10px;
     }
+
+}
+
+
+/* .table th:first-child,
+.table td:first-child{
+    width: 20%;
+    white-space: nowrap;
+} */
+.video{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+}
+.vid{
+    width: 500px;
+    height: 300px;
 }

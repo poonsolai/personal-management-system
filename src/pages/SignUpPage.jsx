@@ -9,7 +9,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import Load from '../components/Load';
 import { useNavigate } from 'react-router-dom';
-
+import api from '../hooks/api';
 
 const SignUpPage = () => {
   //auto navigater
@@ -24,6 +24,8 @@ const SignUpPage = () => {
   const [load,setLoad] = useState(false);
   // state variable for sucess msg 
   const [msg,setMsg] = useState('');
+  // true 
+  const [btn, setBtn] = useState(false);
   //submit the data for backend
   async function submitData(e){
     e.preventDefault(); // page reload block panna 
@@ -45,10 +47,10 @@ const SignUpPage = () => {
     }else{
       setError(false);
     }
-
+    
     try{
-      let res = await axios.post('https://personal-management-system-backend.onrender.com/auth/signup',val,{withCredentials:true});
-      console.log(res);
+      let res = await axios.post(`${api}/auth/signup`,val,{withCredentials:true});
+      setBtn(true);
       if(res.data.success){
         setError(false);
         setMsg(res.data.message);
@@ -61,6 +63,7 @@ const SignUpPage = () => {
       console.log(err);
     }finally{
       setLoad(false);
+      setBtn(true);
     }
 
   }
@@ -135,7 +138,7 @@ const SignUpPage = () => {
                 { error ? <p className='err'>{err}</p> : <p className='success'>{msg}</p>}
               </div>
 
-            <button type="submit" className="btn btn-yellow w-100 py-2 fw-bold shadow-sm mt-3" onClick={submitData}>Sign Up</button>
+            <button type="submit" className="btn btn-yellow w-100 py-2 fw-bold shadow-sm mt-3" onClick={submitData} disabled={btn}>Sign Up</button>
           </form>
           <p className="text-center mt-4 small">
             Already have an account? <Link className="text-primary fw-bold cursor-pointer un" to={'/login'}>Login</Link>

@@ -2,13 +2,16 @@ import '../../css/dashbord.css'
 import { AuthContext } from '../../context/AuthContext';
 import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
-import {LeaveContext} from '../../context/LeaveContext'
+import {LeaveContext} from '../../context/LeaveContext';
+import api from '../../hooks/api';
+import { useNavigate } from 'react-router-dom';
+import CheckEmpty from '../../hooks/useEmpty';
 const EmployeeDashboard = () => {
-
-  const {user} = useContext(AuthContext); //global variable for auth user
+  const Navigate = useNavigate();
+  const {user, logout} = useContext(AuthContext); //global variable for auth user
   const {totalleave, CalLeave} = useContext(LeaveContext); // total leaves 
   // empty 
-  const [empty, setEmpty] = useState('is empty');
+  const [empty] = useState('is empty');
   const [ety, setEty] = useState(false);
   const [etyl, setEtyl] = useState(false);
   //check employee
@@ -23,51 +26,43 @@ const EmployeeDashboard = () => {
   CalLeave(leaves.length); // total leave calculate
   // check employee function
   async function checkEmployee() {
-    let res = await axios.get(`https://personal-management-system-backend.onrender.com/employee/dashbord/${user.name}/${user.email}`, {withCredentials:true});
-    if(!res.data.success){
-      setCheck(true);
-      setCheckemp(res.data.message);
-      return;
-    }
-    setCheck(false);
-    setEmployee(res.data.user);
+    try{
+      let res = await axios.get(`${api}/employee/dashbord/${user.name}/${user.email}`, {withCredentials:true}); //check employee collection 
+      const res2 = await axios.get(`${api}/admin/dashbord/check/${user.name}`, {withCredentials:true}); //check user collection 
+        if(res2.data.user?.length == 0){
+          logout(); // if user delete in database that time delete also local storage
+          Navigate('/');
+        }
+        if(!res.data.success){
+          setCheck(true);
+          setCheckemp(res.data.message);
+          return;
+        }
+        setCheck(false);
+        setEmployee(res.data.user);
+      }catch(err){
+        console.log(err);
+      }
   }
 
   // get all details in this employee
   async function getAllDetails() {
-    let res = await axios.get(`https://personal-management-system-backend.onrender.com/employee/dashbord/${user.name}`, {withCredentials:true});
-    // if(res.data.tasks.length == 0){
-    //   // setEmpty(res.data.message);
-    //   // setEty(true);
-    //   setUserdetails({...userdetails, leave : res.data.leaves.reverse()});
-    //   return;
-    // }
-    // if(res.data.leaves.length == 0){
-    //   setEmpty(res.data.message);
-    //   setEtyl(true);
-    //   setUserdetails({...userdetails, task : res.data.tasks.reverse()});
-    //   return;
-    // }
-    // setEtyl(false);
-    // setEty(false);
-    setUserdetails({...userdetails, task : res.data.tasks.reverse(), leave : res.data.leaves.reverse()});
+    try{
+      let res = await axios.get(`${api}/employee/dashbord/${user.name}`, {withCredentials:true});
+      setUserdetails({...userdetails, task : res.data.tasks.reverse(), leave : res.data.leaves.reverse()});
+    }catch(err){
+      console.log(err);
+    }
   }
   //first time run the code
   useEffect(()=>{
     checkEmployee();//
     getAllDetails();//
-    // ckeck leaves empty or not
-    if(leaves.length == 0){
-      setEtyl(true);
-    }else{
-      setEtyl(false);
-    }
-    // ckeck task empty or not
-    if(task.length == 0){
-      setEty(true);
-    }else{
-      setEty(false);
-    }
+  },[]);
+
+  useEffect(()=>{
+    CheckEmpty(task, setEty);
+    CheckEmpty(leaves, setEtyl);
   }, [task, leaves]);
 
  const getStatusClass = (status) => {
@@ -107,7 +102,7 @@ const EmployeeDashboard = () => {
         <div className="col-md-4">
           <div className="card shadow-sm border-0 bg-success text-white p-3 dash-card">
             <p className="mb-1">My Salary</p>
-            <h1 className="fw-bold">${employee.salary}</h1>
+            <h1 className="fw-bold">${employee.salary || 0}</h1>
           </div>
         </div>
       </div>
@@ -120,8 +115,12 @@ const EmployeeDashboard = () => {
         </div>
         <div className="table-responsive table-bordered table-hover p-2">
           <table className="table mb-0 " >
-          <thead className="table-light">
-            <tr><th>Task</th><th>Status</th><th>Deadline</th></tr>
+          <thead >
+            <tr>
+              <th className=' bg-primary text-light'>TASK</th>
+              <th className=' bg-primary text-light'>STATUS</th>
+              <th className=' bg-primary text-light'>DEADLINE</th>
+            </tr>
           </thead>
           <tbody>
             
@@ -155,14 +154,18 @@ const EmployeeDashboard = () => {
        <div className=' table-bordered table-hover table-responsive p-2 '>
          <table className="table mb-0">
           <thead className="table-light">
-            <tr><th>From - To</th><th>Reason</th><th>Status</th></tr>
+            <tr>
+              <th className=' bg-primary text-light'>FROM - TO</th>
+              <th className=' bg-primary text-light'>REASON</th>
+              <th className=' bg-primary text-light'>STATUS</th>
+            </tr>
           </thead>
           <tbody>
 
             { leaves &&
                 leaves.slice(0, 2).map((l)=>(
                   <tr key={l._id}>
-                    <td >{l.fromDate} - {l.toDate}</td>
+                    <td style={{width:"39%", whiteSpace:"nowrap"}}>{l.fromDate} - {l.toDate}</td>
                     <td >{l.reason}</td>
                     <td > <span className={`badge-custom py-1 ${l.status.toLowerCase() == 'approved' ? 'bg-success-subtle text-success px-2 py-1' : 'bg-danger-subtle text-danger px-2 py-1'} `} >{l.status}</span></td>
                   </tr>
