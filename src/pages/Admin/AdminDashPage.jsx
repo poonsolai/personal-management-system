@@ -34,7 +34,7 @@ const AdminDashboard = () => {
 
    const [all, setAll] = useState({employees:"", leaves:"", tasks:"",tlength:''})
  
-   let percentage = (Number(all.tasks.filter((t)=>t.status.toLowerCase() == 'completed').length)/Number(length))*100  || 0 ;
+   let percentage = (Number(all.tasks?.filter((t)=>t.status.toLowerCase() == 'completed').length)/Number(length))*100  || 0 ;
    
    let monthlypayout = 0;
 
