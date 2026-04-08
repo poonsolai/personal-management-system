@@ -1,8 +1,11 @@
 import '../css/home.css';
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo.png';
-import vid from '../assets/vid.mp4';
+import logo3 from '../assets/logo3.png';
+import { useState } from 'react';
 const Home = () => {
+
+  const [show, setShow] = useState(false);
   return (
     <div className="container-fulid">
       {/* Navbar */}
@@ -42,13 +45,18 @@ const Home = () => {
               </p>
               <div className="d-flex justify-content-center gap-3">
                 <Link className="btn btn-primary btn-lg px-5 py-3 shadow" to={'/signup'}>Try for Free</Link>
-                <button className="btn btn-light btn-lg px-5 py-3 border shadow-sm abs" >Watch Demo</button>
+                <button className="btn btn-light btn-lg px-5 py-3 border shadow-sm abs" onClick={()=>{setShow(!show)}}>Watch Demo</button>
               </div>
             </div>
           </div>
         </div>
       </header>
-      
+      {
+        show && 
+        <div>
+          <img src={logo3} alt="" width={'100%'} height={500}/>
+        </div>  
+      }
       {/* Features Preview */}
       <section id="features" className="py-5 bg-light">
         <div className="container py-5 text-center">
